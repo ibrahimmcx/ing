@@ -1049,17 +1049,105 @@ button:disabled {
   box-shadow: var(--shadow-xs);
 }
 
-.transcript-box {
+.transcript-panel {
   margin-top: 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 16px 18px;
-  font-family: var(--font-serif);
-  line-height: 1.78;
-  font-size: 0.96rem;
-  white-space: pre-line;
+  padding: 14px 16px;
+}
+
+.transcript-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.transcript-title {
+  font-size: 0.82rem;
+  font-weight: 700;
   color: var(--text-secondary);
+}
+
+.transcript-mode-pills {
+  display: inline-flex;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.transcript-mode-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.transcript-mode-btn.active {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: var(--shadow-xs);
+}
+
+.transcript-body,
+.transcript-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transcript-pair {
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.transcript-pair:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.transcript-en {
+  margin: 0;
+  font-family: var(--font-serif);
+  line-height: 1.74;
+  font-size: 0.96rem;
+  color: var(--text);
+}
+
+.transcript-tr {
+  margin: 7px 0 0;
+  padding: 8px 11px;
+  border-radius: 8px;
+  background: var(--surface-alt);
+  border-left: 3px solid var(--accent-2);
+  font-size: 0.89rem;
+  line-height: 1.62;
+  color: var(--text-secondary);
+}
+
+.transcript-tr-standalone {
+  margin-top: 0;
+}
+
+.transcript-divider {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  padding-top: 6px;
 }
 
 /* ==================== READING EDITORIAL SHEET ==================== */

@@ -1,9 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FileText, Headphones, Pause, Play, RotateCcw, RotateCw } from "lucide-react";
 import { formatTime } from "../utils/grading";
 
 const FULL_RATES = [0.75, 0.9, 1, 1.15, 1.25];
 const COMPACT_RATES = [0.85, 1, 1.15];
+
+function splitParagraphs(text) {
+  return String(text || "")
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
 
 export default function AudioPlayer({
   src,
@@ -14,6 +21,7 @@ export default function AudioPlayer({
   compact = false,
   onPlayCount,
   transcript,
+  transcriptTr,
 }) {
   const audioRef = useRef(null);
   const countedPlayRef = useRef(false);
@@ -23,9 +31,15 @@ export default function AudioPlayer({
   const [duration, setDuration] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showTranscript, setShowTranscript] = useState(false);
+  const [transcriptMode, setTranscriptMode] = useState("both");
 
   const resolvedSrc = src ? (src.startsWith("/") ? src : `/${src}`) : "";
   const speeds = compact ? COMPACT_RATES : FULL_RATES;
+
+  const enParas = useMemo(() => splitParagraphs(transcript), [transcript]);
+  const trParas = useMemo(() => splitParagraphs(transcriptTr), [transcriptTr]);
+  const hasTr = trParas.length > 0;
+  const effectiveMode = hasTr ? transcriptMode : "en";
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -227,7 +241,77 @@ export default function AudioPlayer({
         )}
       </div>
 
-      {transcript && showTranscript && <div className="transcript-box">{transcript}</div>}
+      {transcript && showTranscript && (
+        <div className="transcript-panel">
+          <div className="transcript-header">
+            <span className="transcript-title">Dinleme Metni (Transkript)</span>
+            {hasTr && (
+              <div className="transcript-mode-pills" role="group" aria-label="Transkript Dili">
+                {[
+                  { key: "both", label: "EN + TR" },
+                  { key: "en", label: "İngilizce" },
+                  { key: "tr", label: "Türkçe" },
+                ].map((opt) => (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    className={`transcript-mode-btn ${effectiveMode === opt.key ? "active" : ""}`}
+                    onClick={() => setTranscriptMode(opt.key)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {effectiveMode === "en" && (
+            <div className="transcript-body">
+              {enParas.map((para, i) => (
+                <p key={i} className="transcript-en">
+                  {para}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {effectiveMode === "tr" && (
+            <div className="transcript-body">
+              {trParas.map((para, i) => (
+                <p key={i} className="transcript-tr transcript-tr-standalone">
+                  {para}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {effectiveMode === "both" &&
+            (enParas.length === trParas.length ? (
+              <div className="transcript-pairs">
+                {enParas.map((para, i) => (
+                  <div key={i} className="transcript-pair">
+                    <p className="transcript-en">{para}</p>
+                    <p className="transcript-tr">{trParas[i]}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="transcript-body">
+                {enParas.map((para, i) => (
+                  <p key={`en-${i}`} className="transcript-en">
+                    {para}
+                  </p>
+                ))}
+                <div className="transcript-divider">Türkçe Çeviri</div>
+                {trParas.map((para, i) => (
+                  <p key={`tr-${i}`} className="transcript-tr">
+                    {para}
+                  </p>
+                ))}
+              </div>
+            ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -10,6 +10,7 @@ dist/
 data/ocr_pages.json
 data/raw_passages.json
 data/batches/
+data/tr_batches/
 data/passages.js
 data/segmentation_report.json
 data/validation_report.json

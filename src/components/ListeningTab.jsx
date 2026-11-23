@@ -91,6 +91,7 @@ export default function ListeningTab({ passage, passageState, updateSkill }) {
         rate={passage.rate}
         replays={st.replays || 0}
         transcript={passage.tts_script}
+        transcriptTr={passage.tts_script_tr}
         onPlayCount={() =>
           updateSkill(passage.id, "listening", (prev) => ({
             ...prev,
