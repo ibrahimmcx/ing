@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+*.local
+
+# Source PDFs (exceed GitHub 100 MB limit / copyrighted source material)
+*.pdf
+
+# Intermediate OCR, batch, and validation artifacts (final dataset is data/passages.json)
+data/ocr_pages.json
+data/raw_passages.json
+data/batches/
+data/passages.js
+data/segmentation_report.json
+data/validation_report.json
